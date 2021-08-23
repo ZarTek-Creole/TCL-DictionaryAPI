@@ -11,7 +11,7 @@
 #		obtenir des définitions de mots
 #
 #	Version		:
-#		1.2.1
+#		1.2.2
 #
 #	Donation	:
 #		https://github.com/MalaGaM/DONATE
@@ -154,7 +154,7 @@ namespace eval ::DictionaryAPI {
 	#############################################################################
 	variable scriptname				"DictionaryAPI"
 	variable scriptauteur			"MalaGaM <MalaGaM.ARTiSPRETiS@GMail.Com> @ https://github.com/MalaGaM"
-	variable version				"1.2.1"
+	variable version				"1.2.2"
 	if { $USE_HTTP_SSL == 1 } {
 		variable HTTP_URL_API		"https://${HTTP_URL_API}"
 	} else {

@@ -68,18 +68,18 @@ namespace eval ::DictionaryAPI {
 	# Annonce prefix-> devant les annonce irc
 	variable Annonce_Prefix			"\00301,00DictionaryAPI\003> "
 
+	### Formatting of text by block type. | Formatage du texte par bloc de type.
+	# Creation of the style, colors by type of block for the creation of the output display.
+	# Creation du style, couleurs par type de bloc pour la creation de l'affichage de sortie.
 	##
-	# ANNONCES "BLOCK" STYLE VARIABLES
-	# Add colors etc
-	##
-	# "\${DICT_DEFINITION}"			: definition
-	# "\${DICT_NUMBER}"				: Le numero de la definition
-	# "\${DICT_WORD}"				: le mot en question
-	# "\${DICT_TYPE}"				: partOfSpeech
-	# "\${DICT_EXAMPLE}"			: Exemple de la definition
-	# "\${DICT_SYNONYMS}"			: Les synonimes de la definition
-	# "\${DICT_ANTONYMS}"			: Les antonimes de la definition
-	# "\${DICT_PHONETICS}"			: DICT_PHONETICS de la definition
+	# "\${DICT_DEFINITION}"			: The definition text | Le texte de définition
+	# "\${DICT_NUMBER}"				: The numbering of the definition | La numerotation de la définition 
+	# "\${DICT_WORD}"				: The word corresponding to the definition | Le mot correspondant à la définition
+	# "\${DICT_TYPE}"				: The part of the speech | La partie du discours
+	# "\${DICT_EXAMPLE}"			: Example of use of the word | Exemple d'utilisation du mot
+	# "\${DICT_SYNONYMS}"			: Synonyms of the word | Les synonymes du mot
+	# "\${DICT_ANTONYMS}"			: The antonyms of the word | Les antonymes du mot
+	# "\${DICT_PHONETICS}"			: The phonetics of the word | Les phonétique du mot
 	# "\n"							: Retour a la ligne, nouvelle phrase??
 	###	
 	variable BLOCK_DEFINITION		" > \${DICT_DEFINITION}"
@@ -90,8 +90,9 @@ namespace eval ::DictionaryAPI {
 	variable BLOCK_SYNONYMS			" > (\${DICT_SYNONYMS})"
 	variable BLOCK_ANTONYMS			" != \${DICT_ANTONYMS}"
 	variable BLOCK_PHONETICS		" (\${DICT_PHONETICS})"
-	##
-	# ANNONCES VARIABLES POSITION (if exists)
+	### Creation of the image output by positioning block types | Creation de la sortie l'image en positionnement des types de bloc
+	# Block type available, if it exists for the word ;
+	# Type de bloc disponible, si elle existe pour le mot :
 	##
 	# "\${BLOCK_DEFINITION}"
 	# "\${BLOCK_NUMBER}"
@@ -103,17 +104,21 @@ namespace eval ::DictionaryAPI {
 	# "\${BLOCK_PHONETICS}"
 	# "\n"							: Retour a la ligne, nouvelle phrase
 	###
-	# Multi exemple:
+	# Position them in the variable below in the desired order
+	# Positionner-les dans la variable ci-dessous dans l'ordre souhaité
 
+	# Multi exemple:
+	#
 	#variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_TYPE}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
 	#variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
 	variable Annonce_Show			"\${DICT_NUMBER}\${DICT_WORD}\${DICT_TYPE}\n\${DICT_DEFINITION}\n\${DICT_EXAMPLE}"
 
-	# Annonce notfound
-	## "\${WORD_SEARCH}"			: word not found
-	## "\${URL_Link}"				: url not found
-
-
+	### Block type in case of result not found | Type de bloc en cas de résultat non trouver
+	# "\${WORD_SEARCH}"			: word not found
+	# "\${URL_Link}"			: url not found
+	###
+	# Position them in the variable below in the desired order
+	# Positionner-les dans la variable ci-dessous dans l'ordre souhaité
 	variable Annonce_notfound		"Aucune définition trouvée pour \00306\${WORD_SEARCH}\002. (\${URL_Link})"
 	#variable Annonce_notfound		"No definition found for \00306\${WORD_SEARCH}\002. (\${URL_Link})"
 

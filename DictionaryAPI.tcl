@@ -51,7 +51,7 @@ namespace eval ::DictionaryAPI {
 	# Liste des salons où le script sera active mettre "*" pour tout les salons
 	# Exemple pour autoriser #channel1 et #channel2
 	#	set Channels(Allow)				" #channel1  #channel2"
-	set Channels(Allow)			"*"
+	set Channels(Allow)				"*"
 
 	### Public IRC commands | Commandes IRC publique
 	# Define the IRC commands that the script should respond to and look for definitions.
@@ -118,7 +118,7 @@ namespace eval ::DictionaryAPI {
 	#variable Annonce_notfound		"No definition found for \00306\${WORD_SEARCH}\002. (\${URL_Link})"
 
 	# Maximum number of results | Nombre de resultats maximun
-	variable max_annonce_defaul		2
+	variable max_annonce_default	2
 
 	# Maximum number of results defined by the user | Nombre de résultats maximum défini par l'utilisateur
 	variable max_annonce_user		10
@@ -147,9 +147,9 @@ namespace eval ::DictionaryAPI {
 	#############################################################################
 	### Initialisation
 	#############################################################################
-	variable scriptname			"DictionaryAPI"
-	variable scriptauteur		"MalaGaM <MalaGaM.ARTiSPRETiS@GMail.Com> @ https://github.com/MalaGaM"
-	variable version			"1.2.1"
+	variable scriptname				"DictionaryAPI"
+	variable scriptauteur			"MalaGaM <MalaGaM.ARTiSPRETiS@GMail.Com> @ https://github.com/MalaGaM"
+	variable version				"1.2.1"
 	if { $USE_HTTP_SSL == 1 } {
 		variable HTTP_URL_API		"https://${HTTP_URL_API}"
 	} else {
@@ -224,7 +224,7 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 		return
 	}
 	set RE {-limit[\s|=](\S+)}
-	if { [regexp -nocase -- $RE $WORD_SEARCH -> limit]} {
+	if { [regexp -nocase -- $RE $WORD_SEARCH -> limit] } {
 		regsub -nocase -- $RE $WORD_SEARCH {} WORD_SEARCH
 		set WORD_SEARCH		[string trim $WORD_SEARCH]
 		if {$limit > $::DictionaryAPI::max_annonce_user} {

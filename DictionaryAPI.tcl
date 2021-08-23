@@ -203,7 +203,7 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 		putserv "PRIVMSG $chan :$MSG"
 		return
 	}
-	set WORD_SEARCH			[stripcodes * $arg]
+	set WORD_SEARCH			[stripcodes bcruag $arg]
 	if {$WORD_SEARCH == ""} {
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] <word> "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr>\] | default lang: $::DictionaryAPI::Lang "

@@ -155,7 +155,7 @@ namespace eval ::DictionaryAPI {
 	} else {
 		variable HTTP_URL_API		"http://${HTTP_URL_API}"
 	}
-	proc unload {args} {
+	proc unload { args } {
 		putlog "Désallocation des ressources de ${::DictionaryAPI::scriptname}..."
 		foreach binding [lsearch -inline -all -regexp [binds *[set ns [::tcl::string::range [namespace current] 2 end]]*] " \{?(::)?$ns"] {
 			unbind [lindex $binding 0] [lindex $binding 1] [lindex $binding 2] [lindex $binding 4]
@@ -196,7 +196,7 @@ proc ::DictionaryAPI::SetBlock { WHAT VALUE } {
 	set DICT_$WHAT $VALUE
 	set ::DictionaryAPI::DICT_$WHAT [subst [subst $[join ::DictionaryAPI::BLOCK_$WHAT]]]
 }
-proc ::DictionaryAPI::Search {nick host hand chan arg} {
+proc ::DictionaryAPI::Search { nick host hand chan arg } {
 	if { $::DictionaryAPI::Channels(Allow) != "*" && [lsearch -nocase $::DictionaryAPI::Channels(Allow) $chan] == "-1" } { 
 		set MSG    "DictionaryAPI: The channel '$chan' is not in allow channel."
 		putlog $MSG
@@ -204,7 +204,7 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 		return
 	}
 	set WORD_SEARCH			[stripcodes bcruag $arg]
-	if {$WORD_SEARCH == ""} {
+	if { $WORD_SEARCH == "" } {
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] <word> "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr>\] | default lang: $::DictionaryAPI::Lang "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LIMIT   : \[-limit=<1-$::DictionaryAPI::max_annonce_user>\] | default limit: $::DictionaryAPI::max_annonce_default "
@@ -213,8 +213,8 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}EXAMPLE : [lindex $::DictionaryAPI::public_cmd 0] SetLang es"
 		return
 	}
-	if {[string match -nocase [lindex $arg 0] "SetLang"] } {
-		if {[lindex $arg 1] != ""} {
+	if { [string match -nocase [lindex $arg 0] "SetLang"] } {
+		if { [lindex $arg 1] != "" } {
 			set ::DictionaryAPI::Lang [lindex $arg 1]
 			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Default lang is now : $::DictionaryAPI::Lang"
 		} else {
@@ -227,7 +227,7 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 	if { [regexp -nocase -- $RE $WORD_SEARCH -> limit] } {
 		regsub -nocase -- $RE $WORD_SEARCH {} WORD_SEARCH
 		set WORD_SEARCH		[string trim $WORD_SEARCH]
-		if {$limit > $::DictionaryAPI::max_annonce_user} {
+		if { $limit > $::DictionaryAPI::max_annonce_user } {
 			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} limit max is $::DictionaryAPI::max_annonce_user"
 			set limit		$::DictionaryAPI::max_annonce_user
 		}
@@ -235,14 +235,13 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 		set limit	$::DictionaryAPI::max_annonce_default
 	}
 	set RE {-lang[\s|=](\S+)}
-	if { [regexp -nocase -- $RE $WORD_SEARCH -> lang]} {
+	if { [regexp -nocase -- $RE $WORD_SEARCH -> lang] } {
 		regsub -nocase -- $RE $WORD_SEARCH {} WORD_SEARCH
 		set WORD_SEARCH		[string trim $WORD_SEARCH]
 		set URL_Link		"${::DictionaryAPI::HTTP_URL_API}/${lang}/${WORD_SEARCH}"
 	} else {
 		set URL_Link		"${::DictionaryAPI::HTTP_URL_API}/${::DictionaryAPI::Lang}/${WORD_SEARCH}"
 	}
-
 
 	set URL_DATA		[::DictionaryAPI::GetURL $URL_Link]
 
@@ -263,14 +262,14 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 		set SUBCAT							[dict get $PARENT]
 		set TMP_phonetics					[dict get $SUBCAT phonetics]
 		::DictionaryAPI::SetBlock WORD		[dict get $SUBCAT word]
-		if {$TMP_phonetics != "{}"} {
+		if { $TMP_phonetics != "{}" } {
 			::DictionaryAPI::SetBlock PHONETICS	$phonetics
 			unset TMP_phonetics
 		}
 		set SUBMEANINGS						[dict get $SUBCAT meanings]
 		foreach { ENFANT } [dict get $SUBCAT meanings] {
 			set TMP_partOfSpeech			[dict get $ENFANT partOfSpeech]
-			if {$TMP_partOfSpeech != "{}"} {
+			if { $TMP_partOfSpeech != "{}" } {
 				::DictionaryAPI::SetBlock TYPE	$TMP_partOfSpeech
 				unset TMP_partOfSpeech
 			}
@@ -289,7 +288,7 @@ proc ::DictionaryAPI::Search {nick host hand chan arg} {
 				foreach Annonce [split [subst ${::DictionaryAPI::Annonce_Show}] "\n"] {
 					putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}$Annonce"
 				}
-				if {$limit == $DICT_NUMBER} { return }
+				if { $limit == $DICT_NUMBER } { return }
 			}
 		}
 	}

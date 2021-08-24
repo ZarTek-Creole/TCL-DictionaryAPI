@@ -119,8 +119,8 @@ namespace eval ::DictionaryAPI {
 	###
 	# Position them in the variable below in the desired order
 	# Positionner-les dans la variable ci-dessous dans l'ordre souhaité
-	variable Annonce_notfound		"Aucune définition trouvée pour \00306\${WORD_SEARCH}\002. (\${URL_Link})"
-	#variable Annonce_notfound		"No definition found for \00306\${WORD_SEARCH}\002. (\${URL_Link})"
+	variable Annonce_notfound		"Aucune définition trouvée pour \00306\${WORD_SEARCH}\002\003."
+	#variable Annonce_notfound		"No definition found for \00306\${WORD_SEARCH}\002\003. (\${URL_Link})"
 
 	# Maximum number of results | Nombre de resultats maximun
 	variable max_annonce_default	2

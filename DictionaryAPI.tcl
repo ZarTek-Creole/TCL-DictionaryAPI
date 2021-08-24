@@ -10,14 +10,11 @@
 #		Script TCL pour eggdrop qui utilise l'API Dictionary v2 pour rechercher et
 #		obtenir des définitions de mots
 #
-#	Version		:
-#		1.2.2
-#
 #	Donation	:
 #		https://github.com/MalaGaM/DONATE
 #
 #	Auteur		:
-#		MalaGaM <MalaGaM.ARTiSPRETiS@GMail.Com> @ https://github.com/MalaGaM
+#		MalaGaM @ https://github.com/MalaGaM
 #
 #	Website		:
 #		https://github.com/MalaGaM/TCL-DictionaryAPI
@@ -29,8 +26,9 @@
 #		https://github.com/MalaGaM/TCL-DictionaryAPI/wiki
 #
 #	Thanks to	:
-#		CrazyCat	-	community french and help of eggdrop	:	https://www.eggdrop.fr
-#		MenzAgitat	-	tips/toolbox							:	https://www.boulets.oqp.me/
+#		CrazyCat	-	Community french and help of eggdrop	:	https://www.eggdrop.fr
+#		MenzAgitat	-	Tips/Toolbox							:	https://www.boulets.oqp.me/
+#		mabrook		-	Reports bugs and test					:	https://forum.eggdrop.fr/member.php?action=profile&uid=3935
 #
 ###############################################################################################
 if { [::tcl::info::commands ::DictionaryAPI::unload] eq "::DictionaryAPI::unload" } { ::DictionaryAPI::unload }

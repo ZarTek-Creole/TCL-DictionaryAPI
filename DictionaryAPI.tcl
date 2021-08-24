@@ -267,8 +267,6 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 		variable DICT_WORD					""
 		variable DICT_TYPE					""
 		variable DICT_NUMBER				0
-		variable DICT_EXAMPLE				""
-		variable DICT_SYNONYMS				""
 		variable DICT_ANTONYMS				""
 		variable DICT_PHONETICS_AUDIO		""
 		variable DICT_PHONETICS_TEXT		""
@@ -295,6 +293,8 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 				unset TMP_partOfSpeech
 			}
 			foreach { SUBDEFINITION } [dict get $ENFANT definitions] {
+				variable DICT_EXAMPLE				""
+				variable DICT_SYNONYMS				""
 				::DictionaryAPI::SetBlock DEFINITION		[dict get $SUBDEFINITION definition]
 				if {
 					[dict exists $SUBDEFINITION synonyms] \

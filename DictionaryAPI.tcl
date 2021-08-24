@@ -51,7 +51,7 @@ namespace eval ::DictionaryAPI {
 	# Liste des salons où le script sera active mettre "*" pour tout les salons
 	# Exemple pour autoriser #channel1 et #channel2
 	#	set Channels(Allow)				" #channel1  #channel2"
-	set Channels(Allow)				"*"
+	set Channels(Allow)				"#sata.log"
 
 	### Public IRC commands | Commandes IRC publique
 	# Define the IRC commands that the script should respond to and look for definitions.
@@ -153,7 +153,7 @@ namespace eval ::DictionaryAPI {
 	### Initialisation
 	#############################################################################
 	variable scriptname				"DictionaryAPI"
-	variable scriptauteur			"MalaGaM <MalaGaM.ARTiSPRETiS@GMail.Com> @ https://github.com/MalaGaM"
+	variable scriptauteur			"MalaGaM @ https://github.com/MalaGaM"
 	variable version				"1.2.2"
 	if { $USE_HTTP_SSL == 1 } {
 		variable HTTP_URL_API		"https://${HTTP_URL_API}"

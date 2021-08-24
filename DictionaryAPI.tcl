@@ -268,7 +268,7 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 		set TMP_phonetics					[dict get $SUBCAT phonetics]
 		::DictionaryAPI::SetBlock WORD		[dict get $SUBCAT word]
 		if { $TMP_phonetics != "{}" } {
-			::DictionaryAPI::SetBlock PHONETICS	$phonetics
+			::DictionaryAPI::SetBlock PHONETICS	$TMP_phonetics
 			unset TMP_phonetics
 		}
 		set SUBMEANINGS						[dict get $SUBCAT meanings]

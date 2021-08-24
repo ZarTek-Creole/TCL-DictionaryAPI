@@ -49,7 +49,7 @@ namespace eval ::DictionaryAPI {
 	# Liste des salons où le script sera active mettre "*" pour tout les salons
 	# Exemple pour autoriser #channel1 et #channel2
 	#	set Channels(Allow)				" #channel1  #channel2"
-	set Channels(Allow)				"#sata.log"
+	set Channels(Allow)				"*"
 
 	### Public IRC commands | Commandes IRC publique
 	# Define the IRC commands that the script should respond to and look for definitions.
@@ -59,9 +59,9 @@ namespace eval ::DictionaryAPI {
 	# Autorisations pour la commande publique
 	variable public_cmd_auth		"-"
 
-	### Default language for output | Langue par défaut pour la sorties
+	### Current language for output | Langue courante pour la sortie
 	# List: en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr
-	variable Lang					"en"
+	variable Lang_current			"en"
 
 	# Annonce prefix-> devant les annonce irc
 	variable Annonce_Prefix			"\00301,00DictionaryAPI\003> "
@@ -107,9 +107,9 @@ namespace eval ::DictionaryAPI {
 
 	# Multi exemple:
 	#
-	#variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_TYPE}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
+	variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_TYPE}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
 	#variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
-	variable Annonce_Show			"\${DICT_NUMBER}\${DICT_WORD}\${DICT_TYPE}\n\${DICT_DEFINITION}\n\${DICT_EXAMPLE}"
+	#variable Annonce_Show			"\${DICT_NUMBER}\${DICT_WORD}\${DICT_TYPE}\n\${DICT_DEFINITION}\n\${DICT_EXAMPLE}"
 
 	### Block type in case of result not found | Type de bloc en cas de résultat non trouver
 	# "\${WORD_SEARCH}"			: word not found
@@ -138,7 +138,7 @@ namespace eval ::DictionaryAPI {
 	variable USE_HTTP_SSL			1
 
 	# URL (n'y touchez pas à moins d'avoir une bonne raison de le faire)
-	variable HTTP_URL_API			"api.dictionaryapi.dev/api/v2/entries"
+	variable HTTP_URL_API			"api.dictionaryapi.dev1/api/v2/entries"
 
 	# User agent for http
 	variable HTTP_USERAGENT			"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2"
@@ -150,16 +150,18 @@ namespace eval ::DictionaryAPI {
 	#############################################################################
 	### Initialisation
 	#############################################################################
-	variable scriptname				"DictionaryAPI"
-	variable scriptauteur			"MalaGaM @ https://github.com/MalaGaM"
-	variable version				"1.2.2"
+	array set script				[list \
+										"name"		"DictionaryAPI"	\
+										"auteur"	"MalaGaM @ https://github.com/MalaGaM" \
+										"version"	"1.2.2"
+									]
 	if { $USE_HTTP_SSL == 1 } {
 		variable HTTP_URL_API		"https://${HTTP_URL_API}"
 	} else {
 		variable HTTP_URL_API		"http://${HTTP_URL_API}"
 	}
 	proc unload { args } {
-		putlog "Désallocation des ressources de ${::DictionaryAPI::scriptname}..."
+		putlog "Désallocation des ressources de ${::DictionaryAPI::script(name)}..."
 		foreach binding [lsearch -inline -all -regexp [binds *[set ns [::tcl::string::range [namespace current] 2 end]]*] " \{?(::)?$ns"] {
 			unbind [lindex $binding 0] [lindex $binding 1] [lindex $binding 2] [lindex $binding 4]
 		}
@@ -177,7 +179,7 @@ proc ::DictionaryAPI::GetURL { URL_Link } {
 	# on restaure l'urlencoding comme il était avant qu'on y touche
 	::http::config -urlencoding $httpconfig(-urlencoding)
 	if { [catch { set URL_TOKEN [::http::geturl $URL_Link -timeout [expr $::DictionaryAPI::HTTP_TIMEOUT * 1000]] } ERR] } {
-		putlog "::DictionaryAPI::GetURL \00314La connexion à \00312\037[set URL_Link]\037\003\00314 n'a pas pu être établie. Il est possible que le site rencontre un problème technique.\003"
+		putlog "::DictionaryAPI::GetURL La connexion à [set URL_Link] n'a pas pu être établie. Il est possible que le site rencontre un problème technique."
 		putlog "::DictionaryAPI::ERROR $ERR"
 		if { $::DictionaryAPI::USE_HTTP_SSL == 1 } { ::http::unregister https }
 		return 0
@@ -209,7 +211,7 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 	set WORD_SEARCH			[stripcodes bcruag $arg]
 	if { $WORD_SEARCH == "" } {
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] <word> "
-		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr>\] | default lang: $::DictionaryAPI::Lang "
+		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr>\] | Current lang: $::DictionaryAPI::Lang_current "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LIMIT   : \[-limit=<1-$::DictionaryAPI::max_annonce_user>\] | default limit: $::DictionaryAPI::max_annonce_default "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}EXAMPLE : [lindex $::DictionaryAPI::public_cmd 0] Diccionario -lang=es -limit=6"
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] SetLang <en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr> | Set lang per default"
@@ -218,10 +220,10 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 	}
 	if { [string match -nocase [lindex $arg 0] "SetLang"] } {
 		if { [lindex $arg 1] != "" } {
-			set ::DictionaryAPI::Lang [lindex $arg 1]
-			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Default lang is now : $::DictionaryAPI::Lang"
+			set ::DictionaryAPI::Lang_current [lindex $arg 1]
+			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Current lang is now : $::DictionaryAPI::Lang_current"
 		} else {
-			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Current lang is : $::DictionaryAPI::Lang"
+			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Current lang is : $::DictionaryAPI::Lang_current"
 		}
 
 		return
@@ -243,7 +245,7 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 		set WORD_SEARCH		[string trim $WORD_SEARCH]
 		set URL_Link		"${::DictionaryAPI::HTTP_URL_API}/${lang}/${WORD_SEARCH}"
 	} else {
-		set URL_Link		"${::DictionaryAPI::HTTP_URL_API}/${::DictionaryAPI::Lang}/${WORD_SEARCH}"
+		set URL_Link		"${::DictionaryAPI::HTTP_URL_API}/${::DictionaryAPI::Lang_current}/${WORD_SEARCH}"
 	}
 
 	set URL_DATA		[::DictionaryAPI::GetURL $URL_Link]
@@ -305,4 +307,4 @@ foreach b $::DictionaryAPI::public_cmd {
 bind evnt - prerehash ::DictionaryAPI::unload
 
 
-putlog "DictionaryAPI $::DictionaryAPI::version by $::DictionaryAPI::scriptauteur loaded."
+putlog "$::DictionaryAPI::script(name) v$::DictionaryAPI::script(version) by $::DictionaryAPI::script(auteur) loaded."

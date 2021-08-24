@@ -56,12 +56,28 @@ namespace eval ::DictionaryAPI {
 	# Définissez les commandes IRC auquel le script doit répondre et chercher les definitions.
 	variable public_cmd				".define !DictionaryAPI .definition"
 
-	# Autorisations pour la commande publique
+	### Authorizations for public procurement. | Autorisations pour la commande publique
+	# "-" for all
 	variable public_cmd_auth		"-"
 
 	### Current language for output | Langue courante pour la sortie
 	# List: en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr
 	variable Lang_current			"en"
+	### The languages ​​available to the user | Les langues disponible à l'utilisateur
+	variable Lang_available			[list \
+										"en"	\
+										"hi"	\
+										"es"	\
+										"fr"	\
+										"ja"	\
+										"ru"	\
+										"de"	\
+										"it"	\
+										"ko"	\
+										"pt-br"	\
+										"ar"	\
+										"tr"	\
+									]
 
 	# Annonce prefix-> devant les annonce irc
 	variable Annonce_Prefix			"\00301,00DictionaryAPI\003> "
@@ -214,21 +230,27 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 	set WORD_SEARCH			[stripcodes bcruag $arg]
 	if { $WORD_SEARCH == "" } {
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] <word> "
-		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr>\] | Current lang: $::DictionaryAPI::Lang_current "
+		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<[join $::DictionaryAPI::Lang_available ,]>\] | Current lang: $::DictionaryAPI::Lang_current "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LIMIT   : \[-limit=<1-$::DictionaryAPI::max_annonce_user>\] | default limit: $::DictionaryAPI::max_annonce_default "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}EXAMPLE : [lindex $::DictionaryAPI::public_cmd 0] Diccionario -lang=es -limit=6"
-		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] SetLang <en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr> | Set Current language"
+		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] SetLang <[join $::DictionaryAPI::Lang_available ,]> | Set Current language"
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}EXAMPLE : [lindex $::DictionaryAPI::public_cmd 0] SetLang es"
 		return
 	}
 	if { [string match -nocase [lindex $arg 0] "SetLang"] } {
-		if { [lindex $arg 1] != "" } {
+		set lang_tmp	[lindex $arg 1]
+		if { $lang_tmp != "" } {
+			if { [lsearch $::DictionaryAPI::Lang_available $lang_tmp] == "-1" } {
+				putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} The language '$lang_tmp' is not available, choose from the list: [join $::DictionaryAPI::Lang_available ", "]"
+				unset lang_tmp
+				return 
+			}
 			set ::DictionaryAPI::Lang_current [lindex $arg 1]
 			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Current lang is now : $::DictionaryAPI::Lang_current"
 		} else {
 			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} Current lang is : $::DictionaryAPI::Lang_current"
 		}
-
+		unset lang_tmp
 		return
 	}
 	set RE {-limit[\s|=](\S+)}
@@ -244,6 +266,11 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 	}
 	set RE {-lang[\s|=](\S+)}
 	if { [regexp -nocase -- $RE $WORD_SEARCH -> lang] } {
+		
+		if { [lsearch $::DictionaryAPI::Lang_available $lang] == "-1" } {
+			putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix} The language '$lang' is not available, choose from the list: [join $::DictionaryAPI::Lang_available ", "]"
+			return 
+		}
 		regsub -nocase -- $RE $WORD_SEARCH {} WORD_SEARCH
 		set WORD_SEARCH		[string trim $WORD_SEARCH]
 		set URL_Link		"${::DictionaryAPI::HTTP_URL_API}/${lang}/${WORD_SEARCH}"

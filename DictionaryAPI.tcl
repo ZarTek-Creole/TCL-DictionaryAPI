@@ -87,7 +87,8 @@ namespace eval ::DictionaryAPI {
 	variable BLOCK_EXAMPLE			" > \00302\"\${DICT_EXAMPLE}\"\003"
 	variable BLOCK_SYNONYMS			" > (\${DICT_SYNONYMS})"
 	variable BLOCK_ANTONYMS			" != \${DICT_ANTONYMS}"
-	variable BLOCK_PHONETICS		" (\${DICT_PHONETICS})"
+	variable BLOCK_PHONETICS_TEXT	" (\${DICT_PHONETICS_TEXT})"
+	variable BLOCK_PHONETICS_AUDIO	"\n PHONETICS AUDIO: \${DICT_PHONETICS_AUDIO}"
 	### Creation of the image output by positioning block types | Creation de la sortie l'image en positionnement des types de bloc
 	# Block type available, if it exists for the word ;
 	# Type de bloc disponible, si elle existe pour le mot :
@@ -99,7 +100,8 @@ namespace eval ::DictionaryAPI {
 	# "\${BLOCK_EXAMPLE}"
 	# "\${BLOCK_SYNONYMS}"
 	# "\${BLOCK_ANTONYMS}"
-	# "\${BLOCK_PHONETICS}"
+	# "\${BLOCK_PHONETICS_TEXT}"
+	# "\${BLOCK_PHONETICS_AUDIO}"
 	# "\n"							: Retour a la ligne, nouvelle phrase
 	###
 	# Position them in the variable below in the desired order
@@ -107,7 +109,7 @@ namespace eval ::DictionaryAPI {
 
 	# Multi exemple:
 	#
-	variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_TYPE}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
+	variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS_TEXT}\${DICT_TYPE}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}\${DICT_PHONETICS_AUDIO}"
 	#variable Annonce_Show			"\${DICT_WORD}\${DICT_PHONETICS}\${DICT_SYNONYMS}\${DICT_ANTONYMS}\${DICT_NUMBER}\${DICT_DEFINITION}\${DICT_EXAMPLE}"
 	#variable Annonce_Show			"\${DICT_NUMBER}\${DICT_WORD}\${DICT_TYPE}\n\${DICT_DEFINITION}\n\${DICT_EXAMPLE}"
 
@@ -121,7 +123,7 @@ namespace eval ::DictionaryAPI {
 	#variable Annonce_notfound		"No definition found for \00306\${WORD_SEARCH}\002\003. (\${URL_Link})"
 
 	# Maximum number of results | Nombre de resultats maximun
-	variable max_annonce_default	2
+	variable max_annonce_default	10
 
 	# Maximum number of results defined by the user | Nombre de résultats maximum défini par l'utilisateur
 	variable max_annonce_user		10
@@ -215,7 +217,7 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LANG    : \[-lang=<en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr>\] | Current lang: $::DictionaryAPI::Lang_current "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}LIMIT   : \[-limit=<1-$::DictionaryAPI::max_annonce_user>\] | default limit: $::DictionaryAPI::max_annonce_default "
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}EXAMPLE : [lindex $::DictionaryAPI::public_cmd 0] Diccionario -lang=es -limit=6"
-		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] SetLang <en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr> | Set lang per default"
+		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}HELP    : [join $::DictionaryAPI::public_cmd "|"] SetLang <en,hi,es,fr,ja,ru,de,it,ko,pt-br,ar,tr> | Set Current language"
 		putserv "PRIVMSG $chan :${::DictionaryAPI::Annonce_Prefix}EXAMPLE : [lindex $::DictionaryAPI::public_cmd 0] SetLang es"
 		return
 	}
@@ -268,12 +270,21 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 		variable DICT_EXAMPLE				""
 		variable DICT_SYNONYMS				""
 		variable DICT_ANTONYMS				""
-		variable DICT_PHONETICS				""
+		variable DICT_PHONETICS_AUDIO		""
+		variable DICT_PHONETICS_TEXT		""
 		set SUBCAT							[dict get $PARENT]
 		set TMP_phonetics					[dict get $SUBCAT phonetics]
 		::DictionaryAPI::SetBlock WORD		[dict get $SUBCAT word]
 		if { $TMP_phonetics != "{}" } {
-			::DictionaryAPI::SetBlock PHONETICS	$TMP_phonetics
+			::DictionaryAPI::SetBlock PHONETICS_TEXT	$TMP_phonetics
+			if { [dict exists [join $TMP_phonetics] audio] } {
+				::DictionaryAPI::SetBlock PHONETICS_AUDIO	[string map {"//" "https://"} [dict get [join $TMP_phonetics] audio]]
+			}
+			if { [dict exists [join $TMP_phonetics] text] } {
+				::DictionaryAPI::SetBlock PHONETICS_TEXT	[dict get [join $TMP_phonetics] text]
+			}
+			
+			
 			unset TMP_phonetics
 		}
 		set SUBMEANINGS						[dict get $SUBCAT meanings]

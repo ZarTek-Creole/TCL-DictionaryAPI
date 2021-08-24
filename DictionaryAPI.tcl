@@ -32,11 +32,11 @@
 #
 ###############################################################################################
 if { [::tcl::info::commands ::DictionaryAPI::unload] eq "::DictionaryAPI::unload" } { ::DictionaryAPI::unload }
-if { [package vcompare [regexp -inline {^[[:digit:]\.]+} $::version] 1.6.20] == -1 } { putloglev o * "\00304\[DictionaryAPI - erreur\]\003 La version de votre Eggdrop est\00304 ${::version}\003; DictionaryAPI ne fonctionnera correctement que sur les Eggdrops version 1.6.20 ou supérieure." ; return }
-if { [::tcl::info::tclversion] < 8.5 } { putloglev o * "\00304\[DictionaryAPI - erreur\]\003 DictionaryAPI nécessite que Tcl 8.5 (ou plus) soit installé pour fonctionner. Votre version actuelle de Tcl est\00304 ${::tcl_version}\003." ; return }
-if { [catch { package require tls}] } { putloglev o * "\00304\[DictionaryAPI - erreur\]\003 DictionaryAPI nécessite le package tls 1.7 (ou plus) pour fonctionner. Le chargement du script a été annulé." ; return }
-if { [catch { package require http}] } { putloglev o * "\00304\[DictionaryAPI - erreur\]\003 DictionaryAPI nécessite le package http 2.9 (ou plus) pour fonctionner. Le chargement du script a été annulé." ; return }
-if { [catch { package require json}] } { putloglev o * "\00304\[DictionaryAPI - erreur\]\003 DictionaryAPI nécessite le package json 1.3 (ou plus) pour fonctionner. Le chargement du script a été annulé." ; return }
+if { [package vcompare [regexp -inline {^[[:digit:]\.]+} $::version] 1.6.20] == -1 } { putloglev o * "\[DictionaryAPI - erreur\] La version de votre Eggdrop est ${::version}; DictionaryAPI ne fonctionnera correctement que sur les Eggdrops version 1.6.20 ou supérieure." ; return }
+if { [::tcl::info::tclversion] < 8.5 } { putloglev o * "\[DictionaryAPI - erreur\] DictionaryAPI nécessite que Tcl 8.5 (ou plus) soit installé pour fonctionner. Votre version actuelle de Tcl est ${::tcl_version}." ; return }
+if { [catch { package require tls}] } { putloglev o * "\[DictionaryAPI - erreur\] DictionaryAPI nécessite le package tls 1.7 (ou plus) pour fonctionner. Le chargement du script a été annulé." ; return }
+if { [catch { package require http}] } { putloglev o * "\[DictionaryAPI - erreur\] DictionaryAPI nécessite le package http 2.9 (ou plus) pour fonctionner. Le chargement du script a été annulé." ; return }
+if { [catch { package require json}] } { putloglev o * "\[DictionaryAPI - erreur\] DictionaryAPI nécessite le package json 1.3 (ou plus) pour fonctionner. Le chargement du script a été annulé." ; return }
 namespace eval ::DictionaryAPI {
 	###############################################################################
 	### Configuration

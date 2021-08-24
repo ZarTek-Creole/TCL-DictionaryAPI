@@ -154,7 +154,7 @@ namespace eval ::DictionaryAPI {
 	array set script				[list \
 										"name"		"DictionaryAPI"	\
 										"auteur"	"MalaGaM @ https://github.com/MalaGaM" \
-										"version"	"1.2.2"
+										"version"	"1.2.3"
 									]
 	if { $USE_HTTP_SSL == 1 } {
 		variable HTTP_URL_API		"https://${HTTP_URL_API}"

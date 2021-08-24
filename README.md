@@ -5,6 +5,7 @@ TCL script for eggdrop that uses **Dictionary v2 API** to find and get word defi
 **Français**
 Script TCL pour eggdrop qui utilise l'**API Dictionary v2** pour rechercher et obtenir des définitions de mots
 
+![image](https://user-images.githubusercontent.com/11725850/130660428-733d9f7f-0b09-4aae-b4b0-2820ce2741c8.png)
 
 # Author | Auteur
 MalaGaM @ https://github.com/MalaGaM

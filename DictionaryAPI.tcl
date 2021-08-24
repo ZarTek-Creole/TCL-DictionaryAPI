@@ -138,10 +138,11 @@ namespace eval ::DictionaryAPI {
 	variable USE_HTTP_SSL			1
 
 	# URL (n'y touchez pas à moins d'avoir une bonne raison de le faire)
-	variable HTTP_URL_API			"api.dictionaryapi.dev1/api/v2/entries"
+	variable HTTP_URL_API			"api.dictionaryapi.dev/api/v2/entries"
 
 	# User agent for http
 	variable HTTP_USERAGENT			"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2"
+	variable HTTP_ERROR				"Error of GetURL, see partyline for more details."
 	###############################################################################
 	### Fin de la configuration
 	###############################################################################
@@ -249,6 +250,10 @@ proc ::DictionaryAPI::Search { nick host hand chan arg } {
 	}
 
 	set URL_DATA		[::DictionaryAPI::GetURL $URL_Link]
+	if { $URL_DATA == 0 } { 
+		putserv "PRIVMSG $chan :$::DictionaryAPI::script(name) > $::DictionaryAPI::HTTP_ERROR"
+		return 0
+	}
 
 	foreach { PARENT } [::json::json2dict $URL_DATA] {
 		if { $PARENT == "title" } {

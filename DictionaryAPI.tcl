@@ -11,19 +11,19 @@
 #		obtenir des définitions de mots
 #
 #	Donation	:
-#		https://github.com/MalaGaM/DONATE
+#		https://github.com/ZarTek-Creole/DONATE
 #
 #	Auteur		:
-#		MalaGaM @ https://github.com/MalaGaM
+#		ZarTek @ https://github.com/ZarTek
 #
 #	Website		:
-#		https://github.com/MalaGaM/TCL-DictionaryAPI
+#		https://github.com/ZarTek-Creole/TCL-DictionaryAPI
 #
 #	Support		:
-#		https://github.com/MalaGaM/TCL-DictionaryAPI/issues
+#		https://github.com/ZarTek-Creole/TCL-DictionaryAPI/issues
 #
 #	Docs		:
-#		https://github.com/MalaGaM/TCL-DictionaryAPI/wiki
+#		https://github.com/ZarTek-Creole/TCL-DictionaryAPI/wiki
 #
 #	Thanks to	:
 #		CrazyCat	-	Community french and help of eggdrop	:	https://www.eggdrop.fr
@@ -171,7 +171,7 @@ namespace eval ::DictionaryAPI {
 	#############################################################################
 	array set script				[list \
 										"name"		"DictionaryAPI"	\
-										"auteur"	"MalaGaM @ https://github.com/MalaGaM" \
+										"auteur"	"ZarTek @ https://github.com/ZarTek" \
 										"version"	"1.2.4"
 									]
 	if { $USE_HTTP_SSL == 1 } {

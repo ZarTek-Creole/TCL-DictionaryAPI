@@ -8,19 +8,19 @@ Script TCL pour eggdrop qui utilise l'**API Dictionary v2** pour rechercher et o
 ![image](https://user-images.githubusercontent.com/11725850/130660428-733d9f7f-0b09-4aae-b4b0-2820ce2741c8.png)
 
 ### Author | Auteur
-MalaGaM @ https://github.com/MalaGaM
+ZarTek @ https://github.com/ZarTek
 
 ### Website
 Official website of the TCL-DictionaryAPI script:
 
 Site internet officiel du script TCL-DictionaryAPI:
-* https://github.com/MalaGaM/TCL-DictionaryAPI
+* https://github.com/ZarTek-Creole/TCL-DictionaryAPI
 
 ### Support
 If you have any remarks, suggestions, ideas, bugs, you can send them to me via the issue form:
 
 Si vous avez des remarques, des suggestions, des idées, des bogues vous pouvez me les faires parvenir via le formulaire issue:
-* https://github.com/MalaGaM/TCL-DictionaryAPI/issues
+* https://github.com/ZarTek-Creole/TCL-DictionaryAPI/issues
 
 ### Prerequisites
 * [eggdrop (v1.6.20+)](http://www.eggheads.org/)
@@ -32,14 +32,14 @@ Si vous avez des remarques, des suggestions, des idées, des bogues vous pouvez 
 Installation, configuration, tips it's on:
 
 Installation, configuration, astuces c'est sur:
-* https://github.com/MalaGaM/TCL-DictionaryAPI/wiki
+* https://github.com/ZarTek-Creole/TCL-DictionaryAPI/wiki
 
 ### Donation
 If you like the script or the work done, you can make a donation to encourage:
 
 Si le script ou le travail accomplie vous plait, vous pouvez faire une donation pour encourager :
-* https://ko-fi.com/malagam
-* https://github.com/MalaGaM/DONATE
+* https://ko-fi.com/ZarTek
+* https://github.com/ZarTek-Creole/DONATE
 * 
 ### Thank's | Merci
 Thanks to the various people who made the script possible:
